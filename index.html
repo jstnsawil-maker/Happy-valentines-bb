@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Will You Always Be My Valentine?</title>
+
+<style>
+body {
+    margin:0;
+    background:black;
+    color:white;
+    font-family: 'Georgia', serif;
+    overflow:hidden;
+}
+
+/* Star Background */
+canvas {
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:-1;
+}
+
+/* Intro */
+#intro {
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+}
+
+.envelope {
+    width:240px;
+    height:150px;
+    background:#7a001f;
+    position:relative;
+    cursor:pointer;
+    transition:all 1s ease;
+}
+
+.envelope:before {
+    content:'';
+    position:absolute;
+    top:-75px;
+    left:0;
+    border-left:120px solid transparent;
+    border-right:120px solid transparent;
+    border-bottom:75px solid #ff0033;
+}
+
+.envelope.open {
+    transform:scale(3);
+    opacity:0;
+}
+
+/* Letter */
+#content {
+    display:none;
+    max-width:700px;
+    margin:80px auto;
+    padding:20px;
+    line-height:1.8;
+    font-size:18px;
+}
+
+button {
+    background:#ff0033;
+    border:none;
+    padding:12px 25px;
+    border-radius:30px;
+    color:white;
+    cursor:pointer;
+    margin-top:20px;
+}
+
+button:hover {
+    background:#ff3366;
+}
+
+#distance, #countdown {
+    margin-top:15px;
+    opacity:0.8;
+    font-size:14px;
+}
+
+#finalMessage {
+    display:none;
+    text-align:center;
+    font-size:24px;
+    margin-top:40px;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="stars"></canvas>
+
+<div id="intro">
+    <div class="envelope" onclick="openLetter()"></div>
+    <p style="margin-top:20px;">Tap to open my heart</p>
+</div>
+
+<div id="content">
+    <div id="typedText"></div>
+
+    <button onclick="playSong()">Play Our Song 🎵</button>
+
+    <div id="distance"></div>
+    <div id="countdown"></div>
+
+    <button onclick="forever()">Forever.</button>
+
+    <div id="finalMessage">
+        Then I will love you in every lifetime.  
+        <br><br>
+        — Justine ❤️
+    </div>
+</div>
+
+<script>
+
+/* Envelope Animation */
+function openLetter(){
+    document.querySelector(".envelope").classList.add("open");
+    setTimeout(()=>{
+        document.getElementById("intro").style.display="none";
+        document.getElementById("content").style.display="block";
+        typeWriter();
+    },1000);
+}
+
+/* Typewriter Effect */
+const message = `
+Hi bb, will you always be my Valentine?
+
+Even if we’re miles apart.
+Even if the only way I can hold you is through a screen.
+Even if all I have are your messages, your voice, and it still feels like home.
+
+Being in an LDR isn’t easy.
+I don’t get to surprise you with random hugs.
+I don’t get to kiss you after a long day.
+I don’t get to hold your hand while we walk.
+
+But what I do get is something deeper —
+I get to love you intentionally.
+I choose you every single day,
+even when the distance makes it hard.
+
+There are nights I miss you so much it physically hurts.
+Nights I wish I could just teleport to you
+and lay beside you,
+even if we don’t talk.
+Just your presence would be enough.
+
+But instead,
+I hold onto our calls,
+our late-night talks,
+the way we laugh at the same things,
+the way we understand each other even through silence.
+
+You are worth every kilometer between us.
+
+I don’t want just one Valentine’s Day with you.
+I want all of them.
+The future ones where we’re finally in the same place.
+The ones where I get to wake up next to you
+and say “Happy Valentine’s” in person.
+The ones where distance is just a story
+we tell about how strong we were.
+
+Thank you for loving me from afar.
+Thank you for being patient.
+Thank you for choosing me
+even when it would be easier not to.
+
+So bb… will you always be my Valentine?
+Not just today.
+Not just while it’s convenient.
+But in every season,
+every distance,
+every version of us.
+
+Because no matter how far you are,
+my heart already lives with you. ❤️
+`;
+
+let i = 0;
+function typeWriter(){
+    if(i < message.length){
+        document.getElementById("typedText").innerHTML += message.charAt(i);
+        i++;
+        setTimeout(typeWriter, 35);
+    }
+}
+
+/* Spotify */
+function playSong(){
+    window.open("https://open.spotify.com/search/Pag%20Ibig%20Ay%20Kanibalismo%20II","_blank");
+}
+
+/* Distance Abu Dhabi → Pasay */
+function calculateDistance(){
+    const R = 6371;
+    const lat1 = 24.4539;
+    const lon1 = 54.3773;
+    const lat2 = 14.5378;
+    const lon2 = 121.0014;
+
+    const dLat = (lat2-lat1)*Math.PI/180;
+    const dLon = (lon2-lon1)*Math.PI/180;
+
+    const a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+        Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180) *
+        Math.sin(dLon/2)*Math.sin(dLon/2);
+
+    const c = 2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+    const d = R*c;
+
+    document.getElementById("distance").innerHTML =
+        "Abu Dhabi → Pasay City: " + d.toFixed(0) + " km apart. Still choosing you.";
+}
+calculateDistance();
+
+/* 7 Month Countdown */
+function updateCountdown(){
+    let now = new Date();
+    let future = new Date();
+    future.setMonth(now.getMonth()+7);
+
+    let diff = future - now;
+
+    let days = Math.floor(diff/(1000*60*60*24));
+    let hours = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+    let minutes = Math.floor((diff%(1000*60*60))/(1000*60));
+
+    document.getElementById("countdown").innerHTML =
+        "7 months from now: " + days + " days, " + hours + " hrs, " + minutes + " mins until our next chapter.";
+}
+setInterval(updateCountdown,1000);
+
+/* Final Message */
+function forever(){
+    document.getElementById("finalMessage").style.display="block";
+}
+
+/* Starfield Animation */
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars=[];
+for(let i=0;i<200;i++){
+    stars.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:Math.random()*1.5,
+        d:Math.random()*0.5
+    });
+}
+
+function drawStars(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle="white";
+    stars.forEach(star=>{
+        ctx.beginPath();
+        ctx.arc(star.x,star.y,star.r,0,Math.PI*2);
+        ctx.fill();
+        star.y+=star.d;
+        if(star.y>canvas.height) star.y=0;
+    });
+    requestAnimationFrame(drawStars);
+}
+drawStars();
+
+</script>
+
+</body>
+</html>
