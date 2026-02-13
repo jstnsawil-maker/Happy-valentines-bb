@@ -131,77 +131,70 @@ function openLetter(){
     },1000);
 }
 
-/* Typewriter Effect */
+/* Paragraph Fade Typewriter */
 const message = `
 Hi bb, will you always be my Valentine?
 
-Even if we’re miles apart.
-Even if the only way I can hold you is through a screen.
-Even if all I have are your messages, your voice, and it still feels like home.
+Even if we’re miles apart. Even if the only way I can hold you is through a screen. Even if all I have are your messages, your voice, and it still feels like home.
 
-Being in an LDR isn’t easy.
-I don’t get to surprise you with random hugs.
-I don’t get to kiss you after a long day.
-I don’t get to hold your hand while we walk.
+Being in an LDR isn’t easy. I don’t get to surprise you with random hugs. I don’t get to kiss you after a long day. I don’t get to hold your hand while we walk. But what I do get is something deeper — I get to love you intentionally. I choose you every single day, even when the distance makes it hard.
 
-But what I do get is something deeper —
-I get to love you intentionally.
-I choose you every single day,
-even when the distance makes it hard.
-
-There are nights I miss you so much it physically hurts.
-Nights I wish I could just teleport to you
-and lay beside you,
-even if we don’t talk.
-Just your presence would be enough.
-
-But instead,
-I hold onto our calls,
-our late-night talks,
-the way we laugh at the same things,
-the way we understand each other even through silence.
+There are nights I miss you so much it physically hurts. Nights I wish I could just teleport to you and lay beside you, even if we don’t talk. Just your presence would be enough. But instead, I hold onto our calls, our late-night talks, the way we laugh at the same things, the way we understand each other even through silence.
 
 You are worth every kilometer between us.
 
-I don’t want just one Valentine’s Day with you.
-I want all of them.
-The future ones where we’re finally in the same place.
-The ones where I get to wake up next to you
-and say “Happy Valentine’s” in person.
-The ones where distance is just a story
-we tell about how strong we were.
+I don’t want just one Valentine’s Day with you. I want all of them. I want the future ones where we’re finally in the same place. The ones where I get to wake up next to you and say “Happy Valentine’s” in person. The ones where distance is just a story we tell about how strong we were.
 
-Thank you for loving me from afar.
-Thank you for being patient.
-Thank you for choosing me
-even when it would be easier not to.
+Thank you for loving me from afar. Thank you for being patient. Thank you for choosing me even when it would be easier not to.
 
-So bb… will you always be my Valentine?
-Not just today.
-Not just while it’s convenient.
-But in every season,
-every distance,
-every version of us.
+So bb… will you always be my Valentine? Not just today. Not just while it’s convenient. But in every season, every distance, every version of us.
 
-Because no matter how far you are,
-my heart already lives with you. ❤️
+Because no matter how far you are, my heart already lives with you. ❤️
 `;
 
-let i = 0;
+let paragraphs = message.split("\n\n");
+let index = 0;
+
 function typeWriter(){
-    if(i < message.length){
-        document.getElementById("typedText").innerHTML += message.charAt(i);
-        i++;
-        setTimeout(typeWriter, 35);
+    if(index < paragraphs.length){
+        let p = document.createElement("p");
+        p.style.opacity = 0;
+        p.style.transition = "opacity 2s ease";
+        p.innerHTML = paragraphs[index];
+
+        document.getElementById("typedText").appendChild(p);
+
+        setTimeout(()=>{
+            p.style.opacity = 1;
+        },100);
+
+        index++;
+        setTimeout(typeWriter, 2500);
+    } else {
+        glowFinalLine();
+        autoOpenSpotify();
     }
 }
 
-/* Spotify */
-function playSong(){
-    window.open("https://open.spotify.com/search/Pag%20Ibig%20Ay%20Kanibalismo%20II","_blank");
+/* Glow + Pulse Effect */
+function glowFinalLine(){
+    const final = document.querySelector("#typedText p:last-child");
+    final.style.color = "#ff4d6d";
+    final.style.textShadow = "0 0 15px #ff4d6d, 0 0 30px #ff1a4d";
+    final.style.animation = "pulse 2s infinite";
 }
 
-/* Distance Abu Dhabi → Pasay */
+/* Spotify Auto Open */
+function autoOpenSpotify(){
+    window.open("https://open.spotify.com/track/6WdR8Eo7M6YIuJ4M4D0M7C","_blank");
+}
+
+/* Manual Button */
+function playSong(){
+    window.open("https://open.spotify.com/track/6WdR8Eo7M6YIuJ4M4D0M7C","_blank");
+}
+
+/* Distance */
 function calculateDistance(){
     const R = 6371;
     const lat1 = 24.4539;
@@ -224,7 +217,7 @@ function calculateDistance(){
 }
 calculateDistance();
 
-/* 7 Month Countdown */
+/* Countdown */
 function updateCountdown(){
     let now = new Date();
     let future = new Date();
@@ -241,12 +234,22 @@ function updateCountdown(){
 }
 setInterval(updateCountdown,1000);
 
-/* Final Message */
+/* Final Button */
 function forever(){
     document.getElementById("finalMessage").style.display="block";
 }
 
-/* Starfield Animation */
+/* Pulse Animation */
+const style = document.createElement("style");
+style.innerHTML = `
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}`;
+document.head.appendChild(style);
+
+/* Starfield */
 const canvas = document.getElementById("stars");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
