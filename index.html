@@ -184,14 +184,14 @@ function glowFinalLine(){
     final.style.animation = "pulse 2s infinite";
 }
 
-/* Spotify Auto Open */
-function autoOpenSpotify(){
-    window.open("https://open.spotify.com/search/Pag%20Ibig%20Ay%20Kanibalismo%20II","_blank");
-}
+function playSong() {
+    // Try opening directly in the Spotify app
+    window.location.href = "spotify:track:410fyfFghBsxNu45LiNJ24";
 
-/* Manual Button */
-function playSong(){
-    window.open("https://open.spotify.com/search/Pag%20Ibig%20Ay%20Kanibalismo%20II","_blank");
+    // Fallback to Spotify web player after 1 second
+    setTimeout(function() {
+        window.location.href = "https://open.spotify.com/track/410fyfFghBsxNu45LiNJ24";
+    }, 1000);
 }
 
 /* Distance */
